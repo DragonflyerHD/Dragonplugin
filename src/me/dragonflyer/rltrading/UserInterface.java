@@ -169,6 +169,7 @@ public class UserInterface extends JFrame {
 		start.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("hi");
 				String url = "https://rocket-league.com/trading?filterItem=";
 				String wantsurl = url + ids.get(0).get(wantsitems.getSelectedItem()) + "&filterCertification="
 						+ ids.get(1).get(wantscertifications.getSelectedItem()) + "&filterPaint="

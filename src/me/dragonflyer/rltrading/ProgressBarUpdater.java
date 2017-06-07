@@ -9,7 +9,7 @@ public class ProgressBarUpdater extends Thread {
 
 	public ProgressBarUpdater(JProgressBar progressBar) {
 		this.progressBar = progressBar;
-		progressBar.setValue(0);
+		value = 0;
 		calc = 0.0D;
 		start();
 	}

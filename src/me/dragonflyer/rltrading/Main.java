@@ -40,9 +40,9 @@ public class Main {
 		}
 		if (starts.size() != 0) {
 			ArrayList<List<String>> idparts = new ArrayList<List<String>>();
-			idparts.add(rawsource.subList(starts.get(0), starts.get(1) - 6));
-			idparts.add(rawsource.subList(starts.get(1), starts.get(2) - 6));
-			idparts.add(rawsource.subList(starts.get(2), starts.get(3) - 11));
+			idparts.add(rawsource.subList(starts.get(0), starts.get(1) - 5));
+			idparts.add(rawsource.subList(starts.get(1), starts.get(2) - 5));
+			idparts.add(rawsource.subList(starts.get(2), starts.get(3) - 7));
 			for (List<String> idpart : idparts) {
 				HashMap<String, String> map = new HashMap<String, String>();
 				for (String line : idpart)
