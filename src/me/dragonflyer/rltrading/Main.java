@@ -154,8 +154,7 @@ public class Main {
 	}
 
 	private static boolean equals(Item item1, Item item2) {
-		return item1.name.equals(item2.name) && item1.certification.equals(item2.certification)
-				&& item1.paint.equals(item2.paint);
+		return item1.name.equals(item2.name) && item1.certification.equals(item2.certification) && item1.paint.equals(item2.paint);
 	}
 
 	private static ArrayList<Item> combine(ArrayList<Item> items) {
@@ -188,8 +187,7 @@ public class Main {
 		ArrayList<String> source = new ArrayList<String>();
 		try {
 			URLConnection con = new URL(url).openConnection();
-			con.setRequestProperty("User-Agent",
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = in.readLine()) != null)
@@ -240,25 +238,25 @@ public class Main {
 					users.add(rawsource.subList(userstart, userstarts.get(i + 1)));
 			}
 			for (List<String> user : users) {
-				String tradeurl = "", notes = "";
+				String notes = "", time = "", tradeurl = "";
 				int hasstart = 0, wantsstart = 0, wantsend = 0;
-				for (int j = 0; j < user.size(); j++) {
-					String line = user.get(j);
-					if (line.contains("\" href=\"/trade/"))
+				for (int i = 0; i < user.size(); i++) {
+					String line = user.get(i);
+					if (line.contains("Read more"))
+						notes = user.get(i + 1).replace("<p>", "").replace("</p>", "");
+					else if (line.contains("rlg-trade-display-added")) {
+						String a = line.split("Active ")[1];
+						time = a.substring(0, a.indexOf(" ") + 2).replace(" ", "");
+					} else if (line.contains("\" href=\"/trade/"))
 						tradeurl = line.split("/")[2].split("\"")[0];
-					else if (line.contains("Read more"))
-						notes = user.get(j + 1).replace("<p>", "").replace("</p>", "");
 					else if (line.contains("id=\"rlg-youritems\""))
-						hasstart = j + 1;
+						hasstart = i + 1;
 					else if (line.contains("id=\"rlg-theiritems\""))
-						wantsstart = j + 1;
+						wantsstart = i + 1;
 					else if (line.equals("<div style=\"clear: both\"></div>"))
-						wantsend = j - 1;
+						wantsend = i - 1;
 				}
-				offers.add(new Offer(user.get(0).split(">")[1].split("<")[0].replace("Steam: ", ""),
-						user.get(1).replace("<span>RLG Username: ", "").replace("</span>", ""), tradeurl, notes,
-						getItems(user.subList(hasstart, wantsstart - 2)),
-						getItems(user.subList(wantsstart, wantsend))));
+				offers.add(new Offer(getItems(user.subList(hasstart, wantsstart - 2)), getItems(user.subList(wantsstart, wantsend)), user.get(0).split(">")[1].split("<")[0].replace("Steam: ", ""), user.get(1).replace("<span>RLG Username: ", "").replace("</span>", ""), notes, time, tradeurl));
 			}
 		}
 		return offers;
@@ -289,8 +287,7 @@ public class Main {
 					else if (line.startsWith("<div class=\"rlg-trade-display-item-paint\""))
 						item.paint = line.split("\"")[5];
 					else if (line.startsWith("<span>"))
-						item.certification = line.replace("<span>", "").replace("</span>", "").replace("</div>", "")
-								.trim();
+						item.certification = line.replace("<span>", "").replace("</span>", "").replace("</div>", "").trim();
 					else if (line.startsWith("<div class=\"rlg-trade-display-item__amount"))
 						amount = true;
 					else if (amount) {

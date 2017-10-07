@@ -41,7 +41,7 @@ public class UserInterface extends JFrame {
 	private static final long serialVersionUID = 1L;
 	JCheckBox exactmatch;
 	JButton start;
-	private String[] columnNames = new String[] { "Has", "Wants", "Steamname", "RLG Username", "Tradeurl", "Notes" };
+	private String[] columnNames = new String[] { "Has", "Wants", "Steamname", "RLG Username", "Notes", "Time", "Tradeurl" };
 	DefaultTableModel model;
 	private JTable table;
 	private ArrayList<HashMap<String, String>> ids;
@@ -52,9 +52,9 @@ public class UserInterface extends JFrame {
 		super("Rocket League Trading");
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
+		} catch (Exception ex) {
 		}
-		setSize(726, 700);
+		setSize(766, 700);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(3);
@@ -72,18 +72,18 @@ public class UserInterface extends JFrame {
 		hasitems.setBounds(0, 40, 200, 20);
 		add(hasitems);
 		JLabel hascertification = new JLabel("SELECT CERTIFICATION");
-		hascertification.setBounds(200, 20, 200, 20);
+		hascertification.setBounds(220, 20, 200, 20);
 		add(hascertification);
 		JComboBox<String> hascertifications = new JComboBox<String>();
 		hascertifications.setMaximumRowCount(30);
-		hascertifications.setBounds(200, 40, 200, 20);
+		hascertifications.setBounds(220, 40, 200, 20);
 		add(hascertifications);
 		JLabel haspaint = new JLabel("SELECT PAINT");
-		haspaint.setBounds(400, 20, 200, 20);
+		haspaint.setBounds(440, 20, 200, 20);
 		add(haspaint);
 		JComboBox<String> haspaints = new JComboBox<String>();
 		haspaints.setMaximumRowCount(30);
-		haspaints.setBounds(400, 40, 200, 20);
+		haspaints.setBounds(440, 40, 200, 20);
 		add(haspaints);
 		JLabel wants = new JLabel("I want this item");
 		wants.setBounds(0, 60, 200, 20);
@@ -96,30 +96,30 @@ public class UserInterface extends JFrame {
 		wantsitems.setBounds(0, 100, 200, 20);
 		add(wantsitems);
 		JLabel wantscertification = new JLabel("SELECT CERTIFICATION");
-		wantscertification.setBounds(200, 80, 200, 20);
+		wantscertification.setBounds(220, 80, 200, 20);
 		add(wantscertification);
 		JComboBox<String> wantscertifications = new JComboBox<String>();
 		wantscertifications.setMaximumRowCount(30);
-		wantscertifications.setBounds(200, 100, 200, 20);
+		wantscertifications.setBounds(220, 100, 200, 20);
 		add(wantscertifications);
 		JLabel wantspaint = new JLabel("SELECT PAINT");
-		wantspaint.setBounds(400, 80, 200, 20);
+		wantspaint.setBounds(440, 80, 200, 20);
 		add(wantspaint);
 		JComboBox<String> wantspaints = new JComboBox<String>();
 		wantspaints.setMaximumRowCount(30);
-		wantspaints.setBounds(400, 100, 200, 20);
+		wantspaints.setBounds(440, 100, 200, 20);
 		add(wantspaints);
 		JLabel timeout = new JLabel("Timeout (s)");
-		timeout.setBounds(620, 0, 100, 20);
+		timeout.setBounds(660, 0, 100, 20);
 		add(timeout);
 		JSpinner timeoutspinner = new JSpinner(new SpinnerNumberModel(0, 0, 600, 1));
-		timeoutspinner.setBounds(620, 20, 100, 20);
+		timeoutspinner.setBounds(660, 20, 100, 20);
 		add(timeoutspinner);
 		JLabel maxthreads = new JLabel("Max Threads");
-		maxthreads.setBounds(620, 40, 100, 20);
+		maxthreads.setBounds(660, 40, 100, 20);
 		add(maxthreads);
 		JSpinner maxthreadsspinner = new JSpinner(new SpinnerNumberModel(10, 1, 100, 1));
-		maxthreadsspinner.setBounds(620, 60, 100, 20);
+		maxthreadsspinner.setBounds(660, 60, 100, 20);
 		add(maxthreadsspinner);
 		exactmatch = new JCheckBox("Exact match");
 		exactmatch.addItemListener(new ItemListener() {
@@ -140,11 +140,11 @@ public class UserInterface extends JFrame {
 				}
 			}
 		});
-		exactmatch.setBounds(620, 80, 100, 20);
+		exactmatch.setBounds(660, 80, 100, 20);
 		add(exactmatch);
 		progress = new JProgressBar();
 		progress.setStringPainted(true);
-		progress.setBounds(0, 130, 720, 20);
+		progress.setBounds(0, 130, 760, 20);
 		progress.setVisible(false);
 		add(progress);
 		model = new DefaultTableModel(columnNames, 0);
@@ -155,73 +155,62 @@ public class UserInterface extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 1 && e.getClickCount() == 2) {
 					int column = table.getSelectedColumn();
-					if (column == 4)
-						openWebpage("https://rocket-league.com/trade/"
-								+ model.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), column));
+					if (column == 6)
+						openWebpage("https://rocket-league.com/trade/" + model.getValueAt(table.convertRowIndexToModel(table.getSelectedRow()), column));
 				}
 			}
 		});
 		JScrollPane tablesp = new JScrollPane(table);
-		tablesp.setBounds(0, 160, 720, 511);
+		tablesp.setBounds(0, 160, 760, 511);
 		add(tablesp);
 		start = new JButton("Start");
-		start.setBounds(620, 100, 100, 20);
 		start.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("hi");
-				String url = "https://rocket-league.com/trading?filterItem=";
-				String wantsurl = url + ids.get(0).get(wantsitems.getSelectedItem()) + "&filterCertification="
-						+ ids.get(1).get(wantscertifications.getSelectedItem()) + "&filterPaint="
-						+ ids.get(2).get(wantspaints.getSelectedItem())
-						+ "&filterName=&filterPlatform=1&filterSearchType=1";
-				int maxthreads = (int) maxthreadsspinner.getValue(), timeout = (int) timeoutspinner.getValue();
-				if (!hasitems.getSelectedItem().equals("Any")) {
-					String hasurl = url + ids.get(0).get(hasitems.getSelectedItem()) + "&filterCertification="
-							+ ids.get(1).get(hascertifications.getSelectedItem()) + "&filterPaint="
-							+ ids.get(2).get(haspaints.getSelectedItem())
-							+ "&filterName=&filterPlatform=1&filterSearchType=2";
-					if (!wantsitems.getSelectedItem().equals("Any")) {
-						ArrayList<String> rawsourcehas = Main.getUrlSource(hasurl),
-								rawsourcewants = Main.getUrlSource(wantsurl);
-						int pageshas = Main.getPages(rawsourcehas), pageswants = Main.getPages(rawsourcewants);
-						item = new Item();
-						item.amount = 1;
-						if (pageshas <= pageswants) {
-							item.name = (String) wantsitems.getSelectedItem();
-							String paint = (String) wantspaints.getSelectedItem();
-							if (!paint.equals("Any"))
-								item.paint = paint;
-							String certification = (String) wantscertifications.getSelectedItem();
-							if (!certification.equals("Any"))
-								item.certification = certification;
-							Main.getOffers(hasurl, maxthreads, timeout,
-									exactmatch.isSelected() ? Main.Mode.ExactHasWants : Main.Mode.HasWants,
-									rawsourcehas, pageshas);
-						} else {
-							item.name = (String) hasitems.getSelectedItem();
-							String paint = (String) haspaints.getSelectedItem();
-							if (!paint.equals("Any"))
-								item.paint = paint;
-							String certification = (String) hascertifications.getSelectedItem();
-							if (!certification.equals("Any"))
-								item.certification = certification;
-							Main.getOffers(wantsurl, maxthreads, timeout,
-									exactmatch.isSelected() ? Main.Mode.ExactWantsHas : Main.Mode.WantsHas,
-									rawsourcewants, pageswants);
-						}
-					} else if (exactmatch.isSelected())
-						Main.getOffers(hasurl, maxthreads, timeout, Main.Mode.ExactHas);
-					else
-						openWebpage(hasurl);
-				} else if (!wantsitems.getSelectedItem().equals("Any")) {
-					if (exactmatch.isSelected())
-						Main.getOffers(wantsurl, maxthreads, timeout, Main.Mode.ExactWants);
-					else
-						openWebpage(wantsurl);
+				if (wantspaints.getItemCount() != 0) {
+					String url = "https://rocket-league.com/trading?filterItem=";
+					String wantsurl = url + ids.get(0).get(wantsitems.getSelectedItem()) + "&filterCertification=" + ids.get(1).get(wantscertifications.getSelectedItem()) + "&filterPaint=" + ids.get(2).get(wantspaints.getSelectedItem()) + "&filterName=&filterPlatform=1&filterSearchType=1";
+					int maxthreads = (int) maxthreadsspinner.getValue(), timeout = (int) timeoutspinner.getValue();
+					if (!hasitems.getSelectedItem().equals("Any")) {
+						String hasurl = url + ids.get(0).get(hasitems.getSelectedItem()) + "&filterCertification=" + ids.get(1).get(hascertifications.getSelectedItem()) + "&filterPaint=" + ids.get(2).get(haspaints.getSelectedItem()) + "&filterName=&filterPlatform=1&filterSearchType=2";
+						if (!wantsitems.getSelectedItem().equals("Any")) {
+							ArrayList<String> rawsourcehas = Main.getUrlSource(hasurl), rawsourcewants = Main.getUrlSource(wantsurl);
+							int pageshas = Main.getPages(rawsourcehas), pageswants = Main.getPages(rawsourcewants);
+							item = new Item();
+							item.amount = 1;
+							if (pageshas <= pageswants) {
+								item.name = (String) wantsitems.getSelectedItem();
+								String paint = (String) wantspaints.getSelectedItem();
+								if (!paint.equals("Any"))
+									item.paint = paint;
+								String certification = (String) wantscertifications.getSelectedItem();
+								if (!certification.equals("Any"))
+									item.certification = certification;
+								Main.getOffers(hasurl, maxthreads, timeout, exactmatch.isSelected() ? Main.Mode.ExactHasWants : Main.Mode.HasWants, rawsourcehas, pageshas);
+							} else {
+								item.name = (String) hasitems.getSelectedItem();
+								String paint = (String) haspaints.getSelectedItem();
+								if (!paint.equals("Any"))
+									item.paint = paint;
+								String certification = (String) hascertifications.getSelectedItem();
+								if (!certification.equals("Any"))
+									item.certification = certification;
+								Main.getOffers(wantsurl, maxthreads, timeout, exactmatch.isSelected() ? Main.Mode.ExactWantsHas : Main.Mode.WantsHas, rawsourcewants, pageswants);
+							}
+						} else if (exactmatch.isSelected())
+							Main.getOffers(hasurl, maxthreads, timeout, Main.Mode.ExactHas);
+						else
+							openWebpage(hasurl);
+					} else if (!wantsitems.getSelectedItem().equals("Any")) {
+						if (exactmatch.isSelected())
+							Main.getOffers(wantsurl, maxthreads, timeout, Main.Mode.ExactWants);
+						else
+							openWebpage(wantsurl);
+					}
 				}
 			}
 		});
+		start.setBounds(660, 100, 100, 20);
 		add(start);
 
 		setVisible(true);
@@ -292,13 +281,14 @@ public class UserInterface extends JFrame {
 			dataArray.get(i).add(toString(offers.get(i).wants));
 			dataArray.get(i).add(offers.get(i).steamname);
 			dataArray.get(i).add(offers.get(i).rlgusername);
-			dataArray.get(i).add(offers.get(i).tradeurl);
 			dataArray.get(i).add(offers.get(i).notes);
+			dataArray.get(i).add(offers.get(i).time);
+			dataArray.get(i).add(offers.get(i).tradeurl);
 		}
 		ArrayList<Object[]> data1 = new ArrayList<>();
 		for (ArrayList<Object> row : dataArray)
-			data1.add(row.toArray(new Object[6]));
-		Object[][] data = new Object[dataArray.size()][6];
+			data1.add(row.toArray(new Object[7]));
+		Object[][] data = new Object[data1.size()][7];
 		data1.toArray(data);
 		model = new DefaultTableModel(data, columnNames) {
 			private static final long serialVersionUID = 1L;
@@ -317,8 +307,9 @@ public class UserInterface extends JFrame {
 		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.DESCENDING));
+		sortKeys.add(new RowSorter.SortKey(5, SortOrder.ASCENDING));
 		sorter.setSortKeys(sortKeys);
-		Comparator<String> comparator = new Comparator<String>() {
+		Comparator<String> itemComparator = new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {
 				int o1amount = 0, o2amount = 0;
@@ -329,18 +320,36 @@ public class UserInterface extends JFrame {
 				return o1amount < o2amount ? -1 : o1amount > o2amount ? 1 : 0;
 			}
 		};
-		sorter.setComparator(0, comparator);
-		sorter.setComparator(1, comparator);
+		Comparator<String> timeComparator = new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				String timeunits = "smhd";
+				int o1unit = timeunits.indexOf(o1.replaceAll("\\d", ""));
+				int o2unit = timeunits.indexOf(o2.replaceAll("\\d", ""));
+				if (o1unit < o2unit)
+					return -1;
+				else if (o1unit > o2unit)
+					return 1;
+				else {
+					int o1value = Integer.valueOf(o1.replaceAll("[^\\d]", "")).intValue();
+					int o2value = Integer.valueOf(o2.replaceAll("[^\\d]", "")).intValue();
+					return o1value < o2value ? -1 : o1value > o2value ? 1 : 0;
+				}
+			}
+		};
+		sorter.setComparator(0, itemComparator);
+		sorter.setComparator(1, itemComparator);
+		sorter.setComparator(5, timeComparator);
 		sorter.sort();
-		table.getColumnModel().getColumn(4).setPreferredWidth(30);
+		table.getColumnModel().getColumn(5).setMaxWidth(32);
+		table.getColumnModel().getColumn(6).setPreferredWidth(25);
 	}
 
 	private String toString(ArrayList<Item> items) {
 		String result = "";
 		for (int i = 0; i < items.size(); i++) {
 			Item item = items.get(i);
-			result += item.amount + " " + item.name + (item.paint.isEmpty() ? "" : "(" + item.paint + ")")
-					+ (item.certification.isEmpty() ? "" : "[" + item.certification + "]");
+			result += item.amount + " " + item.name + (item.paint.isEmpty() ? "" : "(" + item.paint + ")") + (item.certification.isEmpty() ? "" : "[" + item.certification + "]");
 			if (i != items.size() - 1)
 				result += "\n";
 		}
@@ -357,8 +366,7 @@ public class UserInterface extends JFrame {
 			setOpaque(true);
 		}
 
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			if (isSelected) {
 				setForeground(table.getSelectionForeground());
 				setBackground(table.getSelectionBackground());
